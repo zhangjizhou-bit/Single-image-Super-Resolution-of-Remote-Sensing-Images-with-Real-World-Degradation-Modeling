@@ -1,0 +1,19 @@
+df2k:
+  tdsr:
+    source: '../../ntire20/Corrupted-tr-x'
+    target: '../../ntire20/Corrupted-tr-y'
+    valid:
+dped:
+  clean:
+    hr:
+      train: 'D:/Datasets/NTIRE_2020_RWSR/DPEDiphone-tr-x'
+      valid: 'D:/Datasets/NTIRE_2020_RWSR/DPEDiphone-va'
+aid:
+  clean:
+    hr:
+      train: 'D:/Datasets/AID_all/train'
+      valid: 'D:/Datasets/AID_all/test'
+datasets:
+  df2k: '../datasets/DF2K'
+  dped: 'D:/Datasets/NTIRE_2020_RWSR'
+  aid: 'D:/Datasets/AID_all'
