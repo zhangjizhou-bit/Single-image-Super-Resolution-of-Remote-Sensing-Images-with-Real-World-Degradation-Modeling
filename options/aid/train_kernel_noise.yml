@@ -1,0 +1,102 @@
+#### general settings
+name: AID_real_drln_192
+use_tb_logger: true
+# model: srgan
+model: sr
+distortion: sr
+scale: 4
+gpu_ids: [4]
+
+#### datasets
+datasets:
+  train:
+    name: AID_train
+    mode: LQGT
+    aug: noise
+    noise_data: D:/Datasets/AID_all/noise_train/
+    dataroot_GT: D:/Datasets/AID_all/generated/clean/train_real_tdsr/HR
+    dataroot_LQ: D:/Datasets/AID_all/generated/clean/train_real_tdsr/LR
+    # dataroot_GT: D:/Datasets/AID_all/generated/clean/train_bicubic/HR
+    # dataroot_LQ: D:/Datasets/AID_all/generated/clean/train_bicubic/LR
+
+    use_shuffle: true
+    n_workers: 4  # per GPU
+    batch_size: 16
+    GT_size: 192
+    use_flip: true
+    use_rot: true
+    color: RGB
+  val:
+   name: val
+   mode: LQGT
+   dataroot_GT: D:/Datasets/AID_all/generated/clean/valid_real_tdsr/HR
+   dataroot_LQ: D:/Datasets/AID_all/generated/clean/valid_real_tdsr/LR
+  #  dataroot_GT: D:/Datasets/AID_all/generated/clean/valid_bicubic/HR
+  #  dataroot_LQ: D:/Datasets/AID_all/generated/clean/valid_bicubic/LR
+
+#### network structures
+network_G:
+  # which_model_G: RRDBNet
+  which_model_G: DRLN
+  in_nc: 3
+  out_nc: 3
+  nf: 64
+  nb: 23
+network_D:
+  # which_model_D: NLayerDiscriminator
+  which_model_D: discriminator_unet
+  # which_model_D: discriminator_vgg_128
+  in_nc: 3
+  nf: 64
+  nlayer: 3
+
+#### path
+path:
+  # pretrain_model_G: experiments/AID_real_rban_192/models/200000_G.pth
+  # pretrain_model_G: experiments/AID_real_rgn_192/models/200000_G.pth
+  pretrain_model_G: ~
+  strict_load: false
+  # resume_state: ./experiments/AID_real_rban_unet_192/training_state/150000.state
+  resume_state: ~
+
+#### training settings: learning rate scheme, loss
+train:
+  lr_G: !!float 1e-4
+  weight_decay_G: 0
+  beta1_G: 0.9
+  beta2_G: 0.999
+  lr_D: !!float 1e-4
+  weight_decay_D: 0
+  beta1_D: 0.9
+  beta2_D: 0.999
+  lr_scheme: MultiStepLR
+
+  niter: 200001
+  # niter: 237501
+  warmup_iter: -1  # no warm up
+  lr_steps: [20000, 40000, 60000, 80000, 100000, 120000, 140000, 160000, 180000, 200000]
+  lr_gamma: 0.5
+
+  pixel_criterion: l1
+  pixel_weight: !!float 1
+  feature_criterion: l1
+  feature_weight: !!float 1e-3
+  gan_type: ragan  # gan | ragan
+  gan_weight: !!float 2e-4  
+  # pixel_criterion: l1
+  # pixel_weight: 0
+  # feature_criterion: l2
+  # feature_weight: 1
+  # gan_type: gan  # gan | ragan
+  # gan_weight: !!float 1e-3
+
+  D_update_ratio: 1
+  D_init_iters: 0
+
+  manual_seed: 10
+  val_freq: 1000
+
+#### logger
+logger:
+  print_freq: 100
+  save_checkpoint_freq: !!float 5e4

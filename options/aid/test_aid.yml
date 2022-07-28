@@ -1,0 +1,31 @@
+name: drln_real_real
+suffix: ~  # add suffix to saved images
+model: sr
+distortion: sr
+scale: 4
+crop_border: ~  # crop border when evaluation. If None(~), crop the scale pixels
+gpu_ids: [0]
+
+datasets:
+  test_1:  # the 1st test dataset
+    name: AID
+    mode: LR
+    # dataroot_LR: D:/Datasets/AID_all/generated/clean/valid_bicubic/LR
+    # dataroot_LR: D:/Datasets/AID_all/generated/clean/valid_real_tdsr/LR
+    # dataroot_LR: D:/Datasets/RSI-CB256_all/test
+    dataroot_LR: D:/Datasets/UCMerced_LandUse_all/test
+
+#### network structures
+network_G:
+  which_model_G: DRLN
+  in_nc: 3
+  out_nc: 3
+  nf: 64
+  nb: 23
+  upscale: 4
+
+#### path
+path:
+  pretrain_model_G: experiments/AID_real_drln_192/models/200000_G.pth
+  # pretrain_model_G: experiments/AID_real_rban_unet_192_pretrained/models/200000_G.pth
+  root: ./results/
